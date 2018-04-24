@@ -13,10 +13,12 @@ var BallotContract = web3.eth.contract([ { "constant": false, "inputs": [ { "nam
 var Ballot = BallotContract.at('0xfc5B4f63bF514b11c73f4ca46FDbB4C71DCeC39a');
         console.log(Ballot);
 
-
+var candidateName, result;
 
 $("#button").click(function() {
-    Ballot.Ballotbox(document.getElementsByName('mytext[]'), 1575158400);
+    candidateName = $("input[name='mytext[]']").map(function(){return $(this).val();}).get();
+    result = Ballot.Ballotbox(candidateName, 1575158400 ,{from: web3.eth.accounts[0], gas:6721975});
+    alert (result);
 });
 
 function nameOfCandidate(){
