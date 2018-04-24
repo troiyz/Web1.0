@@ -31,7 +31,7 @@ contract Ballot {
     Proposal[] public proposals;
 
     /// Create a new ballot to choose one of `proposalNames`.
-    function Ballot(bytes32[] proposalNames ,uint _timeToExpiry) public {
+    function Ballotbox(bytes32[] proposalNames ,uint _timeToExpiry) public {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
         timeToExpiry = _timeToExpiry;
