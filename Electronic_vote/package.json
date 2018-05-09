@@ -1,0 +1,25 @@
+{
+  "name": "electronic_vote",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.9",
+    "express": "^4.16.3",
+    "express-firebase-auth": "^1.3.3",
+    "express-firebase-middleware": "^2.0.0",
+    "express-session": "^1.15.6",
+    "firebase": "^4.13.1",
+    "firebase-admin": "^5.12.0",
+    "jsonwebtoken": "^8.2.1",
+    "multer": "^1.3.0",
+    "pug": "^2.0.3"
+  }
+}
