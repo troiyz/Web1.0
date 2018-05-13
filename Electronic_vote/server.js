@@ -96,25 +96,38 @@ app.post('/sessionLogin', (req, res) => {
 });
 
 // Get Voters
-app.get ('/voted', (req,res) => {
+app.get('/voted', (req, res) => {
     Ballot.deployed().then(function (instance) {
         countProposals = instance.getProposalsCounts.call();
         nameProposals = instance.getProposalsName.call();
-    // countProposals.then(function(resultLength){
-    //     res.json(resultLength);
-    //     console.log(resultName.length);
-    // })
-    nameProposals.then(function(resultName){
-        // var stringName = [];
-        // stringName.push(web3.toAscii(resultName[0]));
-        // res.json(S(stringName[0]).trim().s);
-        res.render('voted.ejs', {resultName});
-        console.log(resultName);
-    })
+        // countProposals.then(function(resultLength){
+        //     res.json(resultLength);
+        //     console.log(resultName.length);
+        // })
+        nameProposals.then(function (resultName) {
+            var stringName = [];
+            for (i = 0; i < resultName.length; i++) {
+                stringName.push(web3.toAscii(resultName[i]).replace(/\0/g, ''));
+            }
+            res.json(stringName);
+            // res.render('voted.ejs', {resultName});
+            console.log(resultName);
+        })
     }).catch(function (err) {
         console.log(err);
     })
 });
+
+app.post('/voted', (req, res) => {
+    Ballot.deployed().then(function (instance) {
+        voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
+        voting.then(function (voteScore) {
+            console.log(voteScore);
+        })
+    }).catch(function (err) {
+        console.log("Can't deployed function vote");
+    })
+})
 
 app.post('/TestcreateVote', (req, res) => {
     var candidate = req.body.nameCandidate;
@@ -128,13 +141,13 @@ app.post('/TestcreateVote', (req, res) => {
     // console.log(ballotArtifact);
     Ballot.deployed().then(function (instance) {
         createCandi = instance.Ballot_box.sendTransaction(candidate, 1575158400, { from: web3.eth.coinbase, gas: 6721975 });
-        voting = instance.vote.sendTransaction(1, {from: web3.eth.coinbase});
+        voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
         winName = instance.winnerName.call();
-        createCandi.then(function(result){
-            console.log(result);
-        })
-        voting.then(function(voteScore){ 
+        voting.then(function (voteScore) {
             console.log(voteScore);
+        })
+        createCandi.then(function (result) {
+            console.log(result);
         })
         // winName.then(function(resultName){
         //     console.log(resultName);
@@ -150,7 +163,7 @@ app.post('/TestcreateVote', (req, res) => {
         // console.log(BallotContract)
         // console.log(Ballot);
     }).catch(function (err) {
-        console.log(err);
+        console.log("Deployed function create vote Failed!!");
     })
     res.json(candidate);
 });
