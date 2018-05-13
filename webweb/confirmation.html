@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Dynamically add input field using jquery</title>
+<link rel="stylesheet" href="css/styleForm.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css">
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/agency.css">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
+<h1> Confirmation </h1>
+<script>
+$(document).ready(function() {
+    var wrapper         = $(".container1"); 
+    var add_button      = $(".add_form_field"); 
+    
+    $(add_button).click(function(e){ 
+        e.preventDefault();
+            $(wrapper).append('<div class="phoneNumber">PHONE NUMBER &nbsp; &nbsp;<span><input type="text" name="phoneNumber"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span>OTP &nbsp; &nbsp;</span><span><input type="text" name="otp"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp<span><button type="button" class="btz" id="myBtn" onclick="myFunction1();changeText(this);">Submit</button></span></div>'); //add input box
+    });
+    $(wrapper).on("click",".delete", function(e){ 
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+
+function myFunction1() {
+    document.getElementById("myBtn").disabled = true;
+}
+
+function changeText(id) {
+    id.innerHTML = "Submited!";
+}
+
+</script>
+<style type="text/css">
+    .conpage{
+        border-bottom: solid 1px;
+        border-bottom-color: aqua;
+    }
+</style>
+</head>
+<body>
+
+<div class="sidenav">
+  <h2 href="#about">&nbsp;Electronic vote</h2><br><br>
+  <a class="createPage" href="createVote.html">Create vote</a>
+  <a class="conPage"  href="#clients">Confirmation</a>
+  <a class="dashPage" href="dashboard.html">Dashboard</a>
+  <a class="viewPage" href="#contact">View result</a>
+</div>
+
+<div class="container1">
+    <div class="phoneNumber">PHONE NUMBER &nbsp; &nbsp;<span><input type="text" name="phoneNumber"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span>OTP &nbsp; &nbsp;</span><span><input type="text" name="otp"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp<span><button type="button" class="btz" id="myBtn" onclick="myFunction1();changeText(this);">Submit</button></span></div>
+</div>
+    
+</div>
+    <button class="add_form_field">Add &nbsp; <span style="font-size:16px; font-weight:bold;">+ </span></button>
+
+</div>
+</body>
+<script type="text/javascript" src="./node_modules/web3/dist/web3.min.js"></script>
+</html>
