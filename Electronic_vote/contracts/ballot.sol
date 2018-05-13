@@ -29,6 +29,7 @@ contract Ballot {
 
     // A dynamically-sized array of `Proposal` structs.
     Proposal[] public proposals;
+    bytes32[] Candidate;
 
     /// Create a new ballot to choose one of `proposalNames`.
     function Ballot_box(bytes32[] proposalNames ,uint _timeToExpiry) public payable{
@@ -36,6 +37,7 @@ contract Ballot {
         voters[chairperson].weight = 1;
         timeToExpiry = _timeToExpiry;
         startTime = now;
+        Candidate = proposalNames;
 
         // For each of the provided proposal names,
         // create a new proposal object and add it
@@ -50,6 +52,33 @@ contract Ballot {
             }));
         }
     }
+    
+    function getProposalsName() public constant returns (bytes32[] nameCandi_) {
+        nameCandi_ = Candidate;
+    }
+
+    // function getProposalsName(bytes32[] Candidate) public returns (bytes32[]) {
+    //     bytes memory bytesString = new bytes(Candidate.length * 32);
+    //     uint urlLength;
+    //     for (uint i=0; i<Candidate.length; i++) {
+    //         for (uint j=0; j<32; j++) {
+    //             byte char = byte(bytes32(uint(Candidate[i]) * 2 ** (8 * j)));
+    //             if (char != 0) {
+    //                 bytesString[urlLength] = char;
+    //                 urlLength += 1;
+    //             }
+    //         }
+    //     }
+    //     bytes32[] bytesStringTrimmed;
+    //     for (i=0; i<urlLength; i++) {
+    //         bytesStringTrimmed[i] = bytesString[i];
+    //     }
+    //     return bytesStringTrimmed;
+    // }   
+
+    function getProposalsCounts() public constant returns (uint) {
+        return (proposals.length);
+    }   
 
 
     // Give `voter` the right to vote on this ballot.

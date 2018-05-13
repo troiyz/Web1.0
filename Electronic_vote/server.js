@@ -8,6 +8,7 @@ const Web3 = require('web3');
 const solc = require('solc');
 const util = require('util');
 const truffleContract = require('truffle-contract');
+const S = require('string');
 
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8045'));
 var ballotArtifact = JSON.parse(fs.readFileSync('./build/contracts/Ballot.json', 'UTF-8'));
@@ -97,11 +98,21 @@ app.post('/sessionLogin', (req, res) => {
 // Get Voters
 app.get ('/voted', (req,res) => {
     Ballot.deployed().then(function (instance) {
-        winName = instance.winnerName.call();
-    winName.then(function(resultName){
-        res.json(resultName);
-        console.log(resultName.length);
+        countProposals = instance.getProposalsCounts.call();
+        nameProposals = instance.getProposalsName.call();
+    // countProposals.then(function(resultLength){
+    //     res.json(resultLength);
+    //     console.log(resultName.length);
+    // })
+    nameProposals.then(function(resultName){
+        // var stringName = [];
+        // stringName.push(web3.toAscii(resultName[0]));
+        // res.json(S(stringName[0]).trim().s);
+        res.render('voted.ejs', {resultName});
+        console.log(resultName);
     })
+    }).catch(function (err) {
+        console.log(err);
     })
 });
 
