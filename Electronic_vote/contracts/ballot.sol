@@ -32,11 +32,11 @@ contract Ballot {
     bytes32[] Candidate;
 
     /// Create a new ballot to choose one of `proposalNames`.
-    function Ballot_box(bytes32[] proposalNames ,uint _timeToExpiry) public payable{
+    function Ballot_box(bytes32[] proposalNames ,uint _startTime ,uint _timeToExpiry) public payable{
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
         timeToExpiry = _timeToExpiry;
-        startTime = now;
+        startTime = _startTime;
         Candidate = proposalNames;
 
         // For each of the provided proposal names,
@@ -53,9 +53,9 @@ contract Ballot {
         }
     }
     
-    function getProposalsName() public constant returns (bytes32[] nameCandi_) {
-        nameCandi_ = Candidate;
-    }
+    // function getProposalsName() public constant returns (bytes32[] nameCandi_) {
+    //     nameCandi_ = Candidate;
+    // }
 
     // function getProposalsName(bytes32[] Candidate) public returns (bytes32[]) {
     //     bytes memory bytesString = new bytes(Candidate.length * 32);
@@ -145,7 +145,8 @@ contract Ballot {
         Voter storage sender = voters[msg.sender];
         require((!sender.voted) &&
             (voters[msg.sender].weight == 1) &&
-            (now < timeToExpiry));
+            (now < timeToExpiry) &&
+            (now > startTime));
         sender.voted = true;
         sender.vote = proposal;
 

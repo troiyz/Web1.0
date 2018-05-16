@@ -1,6 +1,14 @@
 body {
   overflow-x: hidden;
   font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding-left: 5em;
+  background-color: #233352;
+  margin-left: 20em;
+  margin-top: 5em;
+  margin-bottom: 5em;
+  margin-right: 3em;
+  border: solid 0.5em;
+  border-color: white;
 }
 
 p {
@@ -9,6 +17,7 @@ p {
 
 a {
   color: black;
+  margin-bottom: 1em;
 }
 
 a:hover {
@@ -54,6 +63,22 @@ section h3.section-subheading {
   }
 }
 
+.headerCreatvote{
+  color: white;
+  font-size: 3em;
+  margin-top: 1em;
+}
+
+.nameTitle{
+  color: white;
+  font-size: 2em;
+}
+
+.nameOption{
+  color: white;
+  font-size: 2em;
+}
+
 .btn {
   font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 700;
@@ -84,10 +109,10 @@ section h3.section-subheading {
   text-shadow: none;
 }
 
-::selection {
+/*::selection {
   background: #fed136;
   text-shadow: none;
-}
+}*/
 
 img::selection {
   background: transparent;
@@ -130,6 +155,11 @@ img::-moz-selection {
   font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.logoz{
+  color: white;
+  font-size: 2.3em;
+}
+
 #mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover {
   color: #fed136;
 }
@@ -163,6 +193,8 @@ img::-moz-selection {
     padding: 12px 0;
   }
 }
+
+
 
 header.masthead {
   text-align: center;
@@ -236,4 +268,84 @@ header.masthead .intro-text .intro-heading {
   text-transform: none;
 }
 
+.sidenav {
+    height: 100%;
+    width: 240px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    margin-left: 1em;
+    width: 7em;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+    border-bottom: solid 0.5px;
+    border-bottom-color: aqua;
+}
+
+.main {
+    margin-left: 160px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.containerTime{
+  margin-top: 2em;
+  display: block;
+  width: 19em;
+
+}
+.titleSubb{
+  margin-bottom: 2em;
+}
+.nameTitle{
+  margin-top: 2em;
+  font-size: 20px;
+}
+.nameOption{
+  margin-top: 2em;
+  font-size: 20px;
+}
+
+.btz{
+  background-color: green;
+}
+
+.subjec{
+  margin-top: 2em;
+  font-size: 20px;
+}
+
+.detail{
+  margin-top: 2em;
+  font-size: 20px;
+  border:solid 1px;
+  border-color: white;
+  width: 40%;
+  height: 20%;
+}
+
+.timeDetail{
+  margin-top: 2em;
+  font-size: 20px;
+}
 

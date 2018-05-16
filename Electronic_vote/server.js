@@ -15,9 +15,7 @@ var ballotArtifact = JSON.parse(fs.readFileSync('./build/contracts/Ballot.json',
 var Ballot = truffleContract(ballotArtifact);
 Ballot.setProvider(web3.currentProvider);
 
-let vin = '1234567890';
-let cost = 1000000000000000000;
-let gas = 1000000;
+var title;
 let abi;
 
 
@@ -58,28 +56,17 @@ const isAuthenticated = (req, res, next) => {
 
 app.get('/', (req, res) => res.render('index.ejs'))
 app.get('/login', (req, res) => res.render('login.ejs'))
-app.get('/createVote', (req, res) => {
-    let source = fs.readFileSync('./contracts/ballot.sol', 'UTF-8');
-    let compiled = solc.compile(source);
 
-    bin = compiled.contracts[':Ballot'].bytecode;
-
-    // util.log(`>>>>> setup - Bytecode: ${bin}`);
-    // util.log(`>>>>> setup - ABI: ${compiled.contracts[':Ballot'].interface}`);
-
-    abi = JSON.parse(compiled.contracts[':Ballot'].interface);
-
-    util.log('>>>>> setup - Completed !!!')
-    res.render('testCreateVote.ejs')
-})
 app.get('/logout', isAuthenticated, (req, res) => {
     req.session.idToken = null;
     req.session.user = null;
     res.redirect('/')
 })
-app.get('/home', (req, res) => res.render('home.ejs'))
-app.get('/vote', (req, res) => res.render('vote.ejs'))
-app.post('/vote', (req, res) => res.render('vote.ejs'))
+app.get('/confirmation', (req, res) => res.render('confirmation.ejs'))
+app.get('/dashboard', (req, res) => res.render('dashboard.ejs'))
+app.get('/viewResult', (req, res) => res.render('viewResult.ejs'))
+// app.get('/vote', (req, res) => res.render('vote.ejs'))
+// app.post('/vote', (req, res) => res.render('vote.ejs'))
 
 app.post('/sessionLogin', (req, res) => {
     const toUser = idToken => {
@@ -96,7 +83,7 @@ app.post('/sessionLogin', (req, res) => {
 });
 
 // Get Voters
-app.get('/voted', (req, res) => {
+app.get('/vote', (req, res) => {
     Ballot.deployed().then(function (instance) {
         countProposals = instance.getProposalsCounts.call();
         nameProposals = instance.getProposalsName.call();
@@ -109,12 +96,12 @@ app.get('/voted', (req, res) => {
             for (i = 0; i < resultName.length; i++) {
                 stringName.push(web3.toAscii(resultName[i]).replace(/\0/g, ''));
             }
-            res.json(stringName);
-            // res.render('voted.ejs', {resultName});
+            resultName = stringName;
             console.log(resultName);
+            res.render('vote.ejs', {resultName});
         })
     }).catch(function (err) {
-        console.log(err);
+        console.log("Can't get name of proposals");
     })
 });
 
@@ -129,23 +116,44 @@ app.post('/voted', (req, res) => {
     })
 })
 
-app.post('/TestcreateVote', (req, res) => {
+app.get('/createVote', (req, res) => {
+    let source = fs.readFileSync('./contracts/ballot.sol', 'UTF-8');
+    let compiled = solc.compile(source);
+
+    bin = compiled.contracts[':Ballot'].bytecode;
+
+    // util.log(`>>>>> setup - Bytecode: ${bin}`);
+    // util.log(`>>>>> setup - ABI: ${compiled.contracts[':Ballot'].interface}`);
+
+    abi = JSON.parse(compiled.contracts[':Ballot'].interface);
+
+    util.log('>>>>> setup - Completed !!!')
+    res.render('createVote.ejs')
+})
+
+app.post('/createVote', (req, res) => {
+    title = req.body.titleSub;
     var candidate = req.body.nameCandidate;
+    var dateStart = req.body.startDate;
+    var dateEnd = req.body.endDate;
+    var dateStartTimeStamp = Date.parse(dateStart);
+    var dateEndTimeStamp = Date.parse(dateEnd);
     var createCandi;
     var winName;
     var blockNum;
     var BallotContract;
     var voting;
-    console.log(candidate.length);
+    console.log(dateStartTimeStamp , dateEndTimeStamp);
+    console.log(title, candidate);
 
     // console.log(ballotArtifact);
     Ballot.deployed().then(function (instance) {
-        createCandi = instance.Ballot_box.sendTransaction(candidate, 1575158400, { from: web3.eth.coinbase, gas: 6721975 });
+        createCandi = instance.Ballot_box.sendTransaction(candidate, dateEndTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
         voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
         winName = instance.winnerName.call();
-        voting.then(function (voteScore) {
-            console.log(voteScore);
-        })
+        // voting.then(function (voteScore) {
+        //     console.log(voteScore);
+        // })
         createCandi.then(function (result) {
             console.log(result);
         })

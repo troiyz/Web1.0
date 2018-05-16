@@ -1,6 +1,12 @@
+
+ var dateToday = new Date();
+
 $(function () {
-        $('#datetimepicker6').datetimepicker();
+        $('#datetimepicker6').datetimepicker({
+            minDate: dateToday
+        });
         $('#datetimepicker7').datetimepicker({
+            minDate: dateToday,
             useCurrent: false //Important! See issue #1075
         });
         $("#datetimepicker6").on("dp.change", function (e) {
