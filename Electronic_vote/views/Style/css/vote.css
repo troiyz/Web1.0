@@ -1,0 +1,27 @@
+body {
+    overflow-x: hidden;
+    font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #233352;
+    border: solid 0.5em;
+    border-color: white;
+  }
+
+
+
+.formDetail{
+    font-size: 2em;
+    border: solid 2px;
+    border-color: aqua;
+    width: 30%;
+    height: 6%;
+    margin-left: 25em;
+    margin-bottom: 1.5em;
+    float: left;
+
+}
+
+.btnVote{
+    float: right;
+    height: 100%;
+
+}
