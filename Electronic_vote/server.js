@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session')
+const session = require('express-session');
+const firebase = require("firebase");
 const admin = require('firebase-admin');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -54,6 +55,18 @@ const isAuthenticated = (req, res, next) => {
     }
 }
 
+const isAdmin = (req, res, next) => {
+    const userId = req.session.user.userId;
+    const idToken = req.session.idToken;
+    admin.auth().verifyIdToken(idToken).then((claims) => {
+        if (claims.admin === true) {
+            next();
+        } else {
+            res.redirect('/');
+        }
+    });
+}
+
 app.get('/', (req, res) => res.render('index.ejs'))
 app.get('/login', (req, res) => res.render('login.ejs'))
 
@@ -63,6 +76,7 @@ app.get('/logout', isAuthenticated, (req, res) => {
     res.redirect('/')
 })
 app.get('/confirmation', (req, res) => res.render('confirmation.ejs'))
+app.post('/confirmation', (req, res) => res.json({status: 'ok'}))
 app.get('/dashboard', (req, res) => res.render('dashboard.ejs'))
 app.get('/viewResult', (req, res) => res.render('viewResult.ejs'))
 // app.get('/vote', (req, res) => res.render('vote.ejs'))
@@ -98,7 +112,7 @@ app.get('/vote', (req, res) => {
             }
             resultName = stringName;
             console.log(resultName);
-            res.render('vote.ejs', {resultName});
+            res.render('vote.ejs', { resultName });
         })
     }).catch(function (err) {
         console.log("Can't get name of proposals");
@@ -143,12 +157,12 @@ app.post('/createVote', (req, res) => {
     var blockNum;
     var BallotContract;
     var voting;
-    console.log(dateStartTimeStamp , dateEndTimeStamp);
+    console.log(dateStartTimeStamp, dateEndTimeStamp);
     console.log(title, candidate);
 
     // console.log(ballotArtifact);
     Ballot.deployed().then(function (instance) {
-        createCandi = instance.Ballot_box.sendTransaction(candidate, dateEndTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
+        createCandi = instance.Ballot_box.sendTransaction(candidate, dateStartTimeStamp, dateEndTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
         voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
         winName = instance.winnerName.call();
         // voting.then(function (voteScore) {
@@ -156,6 +170,8 @@ app.post('/createVote', (req, res) => {
         // })
         createCandi.then(function (result) {
             console.log(result);
+        }).catch(function (err) {
+            console.log("create candidate Error !!");
         })
         // winName.then(function(resultName){
         //     console.log(resultName);
@@ -175,8 +191,23 @@ app.post('/createVote', (req, res) => {
     })
     res.json(candidate);
 });
+
 app.get('/auth', isAuthenticated, (req, res) => {
     res.json(req.session.user)
 });
+
+app.get('/admin/users', isAuthenticated, isAdmin, (req, res) => {
+    admin.auth().listUsers(1000)
+        .then(function (listUsersResult) {
+            res.render('admin/userlist', {
+                userList: listUsersResult
+            });
+        })
+        .catch(function (error) {
+            console.log("Error listing users:", error);
+            res.json(error);
+        });
+});
+
 
 app.listen(3000);
