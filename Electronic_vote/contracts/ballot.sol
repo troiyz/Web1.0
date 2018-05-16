@@ -1,4 +1,4 @@
-    pragma solidity ^0.4.16;
+pragma solidity ^0.4.16;
 
 /// @title Voting with delegation.
 contract Ballot {
@@ -53,9 +53,9 @@ contract Ballot {
         }
     }
     
-    // function getProposalsName() public constant returns (bytes32[] nameCandi_) {
-    //     nameCandi_ = Candidate;
-    // }
+    function getProposalsName() public constant returns (bytes32[] nameCandi_) {
+        nameCandi_ = Candidate;
+    }
 
     // function getProposalsName(bytes32[] Candidate) public returns (bytes32[]) {
     //     bytes memory bytesString = new bytes(Candidate.length * 32);
