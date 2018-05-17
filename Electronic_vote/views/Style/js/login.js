@@ -1,13 +1,4 @@
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyBHxu0leiSXx2kCkjIGd8BPd7BEQDvHZAA",
-  authDomain: "blockchain-1.firebaseapp.com",
-  databaseURL: "https://blockchain-1.firebaseio.com",
-  projectId: "blockchain-1",
-  storageBucket: "blockchain-1.appspot.com",
-  messagingSenderId: "474853322960"
-};
-firebase.initializeApp(config);
+
 
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
@@ -21,7 +12,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     if (user != null) {
 
       var email_id = user.email;
-      document.getElementById("user_para").innerHTML = "Welcome User : " + email_id;
+      document.getElementById("user_para").innerHTML = "Welcome Admin : " + email_id;
 
     }
 
@@ -43,12 +34,15 @@ function login() {
   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
   firebase.auth().signInWithEmailAndPassword(userEmail, userPass)
     .then(user => {
+      localStorage.setItem('user', JSON.stringify(user));
       // Get the user's ID token as it is needed to exchange for a session cookie.
       return user.getIdToken().then(idToken => {
+        localStorage.setItem('token', idToken);
         // Session login endpoint is queried and the session cookie is set.
         // CSRF protection should be taken into account.
         // ...
         console.log(idToken);
+
         // return ('/sessionLogin', idToken);
         return $.ajax({
           type: 'POST',
@@ -57,7 +51,7 @@ function login() {
             idToken: idToken
           }
         })
-          .then(() => { location.href = "/" })
+          .then(() => { location.href = "/auth" })
       });
     })
     .catch(function (error) {

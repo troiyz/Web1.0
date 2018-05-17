@@ -1,30 +1,61 @@
 <html>
+
 <head>
   <title>Firebase Login</title>
   <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
   <link rel="stylesheet" href="Style/css/style2.css" />
 </head>
+
 <body>
-  <div id="login_div" class="main-div" >
-    <h3>Firebase Web login Example</h3>
-    <input type="email" placeholder="Email..." id="email_field" name="Email" required/>
-    <input type="password" placeholder="Password..." id="password_field" name="Password" required/>
 
-    <button onclick="login()">Login to Account</button>
-  </div>
+    <form id="sign-in-form" action="#">
+        <!-- Input to enter the phone number -->
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="phoneNumber" type="text" pattern="\+[0-9\s\-\(\)]+" id="phoneNumber">
+            <label class="mdl-textfield__label" for="phoneNumber">Enter your phone number...</label>
+            <span class="mdl-textfield__error">Input is not an international phone number!</span>
+        </div>
+        <input disabled class="mdl-button mdl-js-button mdl-button--raised" type="submit" id="sign-in-button"></input>
+    </form>
 
-  <div id="user_div" class="loggedin-div">
-    <h3>Welcome User</h3>
-    <p id="user_para">Welcome to Firebase web login Example. You're currently logged in.</p>
-    <button onclick="logout()">Logout</button>
-    <h1>GO TO VOTE</h1>
-    <button onclick="window.location.href='vote_someone.html'">GO TO VOTE</button>
-  </div>
+    <!-- Sign-in button -->
+    <!-- Button that handles sign-out -->
+    <button class="mdl-button mdl-js-button mdl-button--raised" id="sign-out-button">Sign-out</button>
+
+    <form id="verification-code-form" action="#" hidden>
+        <!-- Input to enter the verification code -->
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="verification-code" autocomplete="off">
+            <label class="mdl-textfield__label" for="verification-code">Enter the verification code...</label>
+        </div>
+
+        <!-- Button that triggers code verification -->
+        <input type="submit" class="mdl-button mdl-js-button mdl-button--raised" id="verify-code-button" value="Verify Code" />
+        <!-- Button to cancel code verification -->
+        <button class="mdl-button mdl-js-button mdl-button--raised" id="cancel-verify-code-button">Cancel</button>
+    </form>
+
+  <form id="Login_with_Email" hidden>
+    <div id="login_div" class="main-div">
+      <h3>Firebase Web login</h3>
+      <input type="email" placeholder="Email..." id="email_field" name="Email" required/>
+      <input type="password" placeholder="Password..." id="password_field" name="Password" required/>
+      <button onclick="login()">Login to Account</button>
+    </div>
+
+    <div id="user_div" class="loggedin-div">
+      <h3>Welcome</h3>
+      <p id="user_para">Welcome to Firebase web login. You're currently logged in.</p>
+    </div>
+  </form>
+
 
   <script src="Style/vendor/jquery/jquery.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-]
-<script src="Style/js/login.js"></script>
+  <script src="Style/js/firebase_setup.js"></script>
+  <script src="Style/js/login.js"></script>
 
 </body>
+
 </html>

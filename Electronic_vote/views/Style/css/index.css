@@ -1,14 +1,6 @@
 body {
   overflow-x: hidden;
   font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding-left: 5em;
-  background-color: gray;
-  margin-left: 20em;
-  margin-top: 5em;
-  margin-bottom: 5em;
-  margin-right: 3em;
-  border: solid 0.5em;
-  border-color: white;
 }
 
 p {
@@ -351,6 +343,6 @@ header.masthead .intro-text .intro-heading {
 
 .resultVoteCount{
   font-size: 2em;
-  color: black;
+  color: white;
 }
 

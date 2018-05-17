@@ -22,6 +22,8 @@ contract Ballot {
     uint public timeToExpiry;
     uint public startTime;
     uint public timeNow;
+    uint public voteCountNow;
+    uint[] public scoreAll;
 
     // This declares a state variable that
     // stores a `Voter` struct for each possible address.
@@ -142,18 +144,23 @@ contract Ballot {
     /// Give your vote (including votes delegated to you)
     /// to proposal `proposals[proposal].name`.
     function vote(uint proposal) public payable{
-        Voter storage sender = voters[msg.sender];
-        require((!sender.voted) &&
-            (voters[msg.sender].weight == 1) &&
-            (now < timeToExpiry) &&
-            (now > startTime));
-        sender.voted = true;
-        sender.vote = proposal;
+        // Voter storage sender = voters[msg.sender];
+        // require((!sender.voted) &&
+        //     (voters[msg.sender].weight == 1) &&
+        //     (now < timeToExpiry) &&
+        //     (now > startTime));
+        // sender.voted = true;
+        // sender.vote = proposal;
 
         // If `proposal` is out of the range of the array,
         // this will throw automatically and revert all
         // changes.
-        proposals[proposal].voteCount += sender.weight;
+        voteCountNow += 1;
+        proposals[proposal].voteCount += 1;
+    }
+
+    function getVoteCountNow() public constant returns (uint) {
+        return voteCountNow;
     }
 
     /// @dev Computes the winning proposal taking all
@@ -168,6 +175,14 @@ contract Ballot {
                 winningProposal_ = p;
             }
         }
+    }
+
+    function scoreProposal() public payable returns(uint[] scoreProposal_) {
+        scoreProposal_ = new uint[](proposals.length);
+        for (uint i = 0; i < proposals.length; i++) {
+            scoreProposal_[i] = proposals[i].voteCount;
+        }
+        return scoreProposal_;
     }
     
     function winnerName() public view  returns (string) {

@@ -34,43 +34,19 @@
         <a class="viewPage">View result</a>
     </div>
 
-    <form id="sign-in-form" action="#">
-        <!-- Input to enter the phone number -->
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" name="phoneNumber" type="text" pattern="\+[0-9\s\-\(\)]+" id="phoneNumber">
-            <label class="mdl-textfield__label" for="phoneNumber">Enter your phone number...</label>
-            <span class="mdl-textfield__error">Input is not an international phone number!</span>
-        </div>
-        <input disabled class="mdl-button mdl-js-button mdl-button--raised" type="submit" id="sign-in-button"></input>
-    </form>
-
-    <!-- Sign-in button -->
-    <!-- Button that handles sign-out -->
-    <button class="mdl-button mdl-js-button mdl-button--raised" id="sign-out-button">Sign-out</button>
-
-    <form id="verification-code-form" action="#" hidden>
-        <!-- Input to enter the verification code -->
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" id="verification-code" autocomplete="off">
-            <label class="mdl-textfield__label" for="verification-code">Enter the verification code...</label>
-        </div>
-
-        <!-- Button that triggers code verification -->
-        <input type="submit" class="mdl-button mdl-js-button mdl-button--raised" id="verify-code-button" value="Verify Code" />
-        <!-- Button to cancel code verification -->
-        <button class="mdl-button mdl-js-button mdl-button--raised" id="cancel-verify-code-button">Cancel</button>
-    </form>
-
+    <div class="main-List" id="List_div">
+        User List :
+    </div>
 
 
 </body>
+<script type="text/javascript" src="./node_modules/web3/dist/web3.min.js"></script>
 
-<script type="text/javascript" src="../node_modules/web3/dist/web3.min.js"></script>
 <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-firestore.js"></script>
 <script src="Style/js/firebase_setup.js"></script>
-<script src="Style/js/confirmation.js"></script>
+<script src="Style/js/getData.js"></script>
 
 </html>

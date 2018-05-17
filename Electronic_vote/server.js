@@ -10,6 +10,7 @@ const solc = require('solc');
 const util = require('util');
 const truffleContract = require('truffle-contract');
 const S = require('string');
+const $ = require("jquery");
 
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8045'));
 var ballotArtifact = JSON.parse(fs.readFileSync('./build/contracts/Ballot.json', 'UTF-8'));
@@ -18,6 +19,7 @@ Ballot.setProvider(web3.currentProvider);
 
 var title;
 let abi;
+
 
 
 var serviceAccount = require('./blockchain-1-firebase-adminsdk-477z7-286990727e.json');
@@ -67,7 +69,11 @@ const isAdmin = (req, res, next) => {
     });
 }
 
-app.get('/', (req, res) => res.render('index.ejs'))
+app.get('/', (req, res) => {
+    let contractCreation = JSON.parse(fs.readFileSync('./build/contracts/Ballot.json', 'UTF-8'));
+    console.log(contractCreation.networks[7777].address)
+    res.render('index.ejs')
+})
 app.get('/login', (req, res) => res.render('login.ejs'))
 
 app.get('/logout', isAuthenticated, (req, res) => {
@@ -75,10 +81,53 @@ app.get('/logout', isAuthenticated, (req, res) => {
     req.session.user = null;
     res.redirect('/')
 })
+
+app.get('/getData', (req, res) => res.render('getData.ejs'))
+
 app.get('/confirmation', (req, res) => res.render('confirmation.ejs'))
-app.post('/confirmation', (req, res) => res.json({status: 'ok'}))
-app.get('/dashboard', (req, res) => res.render('dashboard.ejs'))
-app.get('/viewResult', (req, res) => res.render('viewResult.ejs'))
+
+app.post('/confirmation', (req, res) => {
+    phoneNum = req.body.phoneNumber;
+    console.log(phoneNum);
+})
+
+app.get('/dashboard', (req, res) => {
+    Ballot.deployed().then(function (instance) {
+        voteCount = instance.getVoteCountNow.call();
+        voteCount.then(function (resultVoteCount) {
+            console.log(voteCount);
+            console.log(resultVoteCount);
+            res.render('dashboard.ejs', { resultVoteCount });
+        })
+    })
+})
+
+app.get('/viewResult', (req, res) => {
+    var score;
+    var win;
+    Ballot.deployed().then(function (instance) {
+        scoreAll = instance.scoreProposal.call();
+        winName = instance.winnerName.call();
+        scoreAll.then(function (scoreVote) {
+            score = scoreVote;
+            console.log("1   " + score);
+        }).catch(function (err) {
+            console.log("can't get score");
+        })
+        winName.then(function (winnName) {
+            win = winnName;
+            console.log("2   " + winnName)
+            res.render('viewResult.ejs', {score, winnName});
+        }).catch(function (err) {
+            console.log("can't get winner name");
+        })
+    })
+
+})
+
+// catch(function (err) {
+//     console.log("Fail to get Winner name and score vote");
+// })
 // app.get('/vote', (req, res) => res.render('vote.ejs'))
 // app.post('/vote', (req, res) => res.render('vote.ejs'))
 
@@ -99,7 +148,7 @@ app.post('/sessionLogin', (req, res) => {
 // Get Voters
 app.get('/vote', (req, res) => {
     Ballot.deployed().then(function (instance) {
-        countProposals = instance.getProposalsCounts.call();
+        // countProposals = instance.getProposalsCounts.call();
         nameProposals = instance.getProposalsName.call();
         // countProposals.then(function(resultLength){
         //     res.json(resultLength);
@@ -120,8 +169,10 @@ app.get('/vote', (req, res) => {
 });
 
 app.post('/voted', (req, res) => {
+    voteSelect = req.body.thisclick;
+    console.log(voteSelect);
     Ballot.deployed().then(function (instance) {
-        voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
+        voting = instance.vote.sendTransaction(voteSelect, { from: web3.eth.coinbase });
         voting.then(function (voteScore) {
             console.log(voteScore);
         })
@@ -163,8 +214,7 @@ app.post('/createVote', (req, res) => {
     // console.log(ballotArtifact);
     Ballot.deployed().then(function (instance) {
         createCandi = instance.Ballot_box.sendTransaction(candidate, dateStartTimeStamp, dateEndTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
-        voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
-        winName = instance.winnerName.call();
+        // voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
         // voting.then(function (voteScore) {
         //     console.log(voteScore);
         // })
@@ -173,10 +223,6 @@ app.post('/createVote', (req, res) => {
         }).catch(function (err) {
             console.log("create candidate Error !!");
         })
-        // winName.then(function(resultName){
-        //     console.log(resultName);
-        // })
-        // })
         // blockNum = (web3.eth.getBlock("latest").number)+1;
         // console.log(blockNum);
         // contractAdd = web3.eth.getBlock("latest");
@@ -199,9 +245,12 @@ app.get('/auth', isAuthenticated, (req, res) => {
 app.get('/admin/users', isAuthenticated, isAdmin, (req, res) => {
     admin.auth().listUsers(1000)
         .then(function (listUsersResult) {
-            res.render('admin/userlist', {
+            res.json({
                 userList: listUsersResult
             });
+            // res.render('admin/userlist', {
+            //     userList: listUsersResult
+            // });
         })
         .catch(function (error) {
             console.log("Error listing users:", error);
