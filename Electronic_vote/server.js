@@ -17,8 +17,10 @@ var ballotArtifact = JSON.parse(fs.readFileSync('./build/contracts/Ballot.json',
 var Ballot = truffleContract(ballotArtifact);
 Ballot.setProvider(web3.currentProvider);
 
+
 var title;
 let abi;
+var nameAddress = new Array();
 
 
 
@@ -28,6 +30,19 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://blockchain-1.firebaseio.com'
 });
+
+const config = {
+    apiKey: "AIzaSyBHxu0leiSXx2kCkjIGd8BPd7BEQDvHZAA",
+    authDomain: "blockchain-1.firebaseapp.com",
+    databaseURL: "https://blockchain-1.firebaseio.com",
+    projectId: "blockchain-1",
+    storageBucket: "blockchain-1.appspot.com",
+    messagingSenderId: "474853322960"
+};
+firebase.initializeApp(config);
+
+var db = admin.firestore();
+
 
 const app = express();
 
@@ -71,10 +86,14 @@ const isAdmin = (req, res, next) => {
 
 app.get('/', (req, res) => {
     let contractCreation = JSON.parse(fs.readFileSync('./build/contracts/Ballot.json', 'UTF-8'));
+    console.log(web3.eth.accounts)
     console.log(contractCreation.networks[7777].address)
     res.render('index.ejs')
 })
-app.get('/login', (req, res) => res.render('login.ejs'))
+app.get('/login', (req, res) => res.render('loginAsVoter.ejs'))
+
+app.post('/login', (req, res) => res.render('loginAsVoter.ejs'))
+
 
 app.get('/logout', isAuthenticated, (req, res) => {
     req.session.idToken = null;
@@ -82,13 +101,32 @@ app.get('/logout', isAuthenticated, (req, res) => {
     res.redirect('/')
 })
 
-app.get('/getData', (req, res) => res.render('getData.ejs'))
+app.get('/getData', (req, res) => {
+    console.log(newAddress);
+    console.log(nameAddress);
+    res.render('getData.ejs')}
+)
 
 app.get('/confirmation', (req, res) => res.render('confirmation.ejs'))
 
 app.post('/confirmation', (req, res) => {
-    phoneNum = req.body.phoneNumber;
+    var phoneNum = req.body.phoneNumber;
+    var newAddress = web3.personal.newAccount();
+    var nameAddress = db.collection("address").doc(phoneNum);
+    var setNameAddress = nameAddress.set({
+        address : newAddress
+    })
+    Ballot.deployed().then(function (instance) {
+        giveRight = instance.giveRightToVote.sendTransaction(newAddress , { from: web3.eth.coinbase, gas: 6721975 })
+        giveRight.then(function (give) {
+            console.log(give);
+        }).catch(function (err){
+            console.log("Can't give right to vote");
+        })
+    })
+    // nameAddress[phoneNum] = newAddress;
     console.log(phoneNum);
+    res.redirect('confirmation.ejs');
 })
 
 app.get('/dashboard', (req, res) => {
@@ -117,7 +155,7 @@ app.get('/viewResult', (req, res) => {
         winName.then(function (winnName) {
             win = winnName;
             console.log("2   " + winnName)
-            res.render('viewResult.ejs', {score, winnName});
+            res.render('viewResult.ejs', { score, winnName });
         }).catch(function (err) {
             console.log("can't get winner name");
         })
@@ -169,10 +207,20 @@ app.get('/vote', (req, res) => {
 });
 
 app.post('/voted', (req, res) => {
+    // var phone = req.body.phoneNumber;
+    // console.log(phone)
+    // var getAdd = db.collection("address").doc(phone);
+    // var query = getAdd.getCollections.then(collections => {
+    //     collections.forEach(collection => {
+    //         console.log('ADDRESS :', collection.id)
+    //     })
+    //     console.log(collection.id);
+    // })
+    console.log(web3.personal.unlockAccount('0xb1d4489db55c6c8d84f9c9197c3e3c6d238d9887'))
     voteSelect = req.body.thisclick;
     console.log(voteSelect);
     Ballot.deployed().then(function (instance) {
-        voting = instance.vote.sendTransaction(voteSelect, { from: web3.eth.coinbase });
+        voting = instance.vote.sendTransaction(voteSelect, { from: '0xb1d4489db55c6c8d84f9c9197c3e3c6d238d9887' });
         voting.then(function (voteScore) {
             console.log(voteScore);
         })

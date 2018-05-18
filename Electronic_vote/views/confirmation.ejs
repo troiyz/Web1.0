@@ -28,10 +28,14 @@
         <div class="logoz" href="/index">&nbsp;Electronic vote</div>
         <br>
         <br>
-        <a href="/createVote" class="createPage">Create vote</a>
-        <a class="conPage">Confirmation</a>
-        <a class="dashPage">Dashboard</a>
-        <a class="viewPage">View result</a>
+        <a class="createPage" href="/createVote">Create vote</a>
+        <a class="conPage" href="/confirmation">Confirmation</a>
+        <a class="dashPage" href="/dashboard">Dashboard</a>
+        <a class="viewPage" href="/viewResult">View result</a>
+    </div>
+
+    <div class="main-List" id="List_div">
+        User List :
     </div>
 
     <form id="sign-in-form" action="#">
@@ -64,13 +68,12 @@
 
 
 </body>
-
-<script type="text/javascript" src="../node_modules/web3/dist/web3.min.js"></script>
 <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-firestore.js"></script>
 <script src="Style/js/firebase_setup.js"></script>
 <script src="Style/js/confirmation.js"></script>
+<script src="Style/js/getData.js"></script>
 
 </html>

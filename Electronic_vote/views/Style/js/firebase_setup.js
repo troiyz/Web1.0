@@ -6,5 +6,5 @@ var config = {
     projectId: "blockchain-1",
     storageBucket: "blockchain-1.appspot.com",
     messagingSenderId: "474853322960"
-  };
-  firebase.initializeApp(config);
+};
+firebase.initializeApp(config);
