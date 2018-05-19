@@ -1,0 +1,62 @@
+body {
+    overflow-x: hidden;
+    font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin-left: 5em;
+    background-color: white
+}
+  
+.headerCreatvote{
+    color: black;
+    font-size: 3em;
+    margin-top: 1em;
+}
+  
+.logoz{
+    color: white;
+    font-size: 2.3em;
+}
+  
+
+.titleSubb{
+    margin-bottom: 2em;
+}
+
+.nameTitle{
+    margin-top: 2em;
+    font-size: 15px;
+    color: black;
+}
+
+.nameOption{
+    margin-top: 2em;
+    font-size: 15px;
+    color: black;
+}
+
+#titleSub{
+    width: 30%;
+}
+
+#optionInput{
+      width: 20%;
+      display: inline;
+      margin-bottom: 1em;
+}
+
+.containerTime{
+    margin-top: 2em;
+    color:black;
+    font-size: 15px;
+}
+
+#datetimepicker6{
+    width: 20%;
+}
+
+#datetimepicker7{
+    width: 20%;
+}
+
+#lunchBtn{
+    margin-top: 2em;
+}
