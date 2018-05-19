@@ -23,6 +23,7 @@ contract Ballot {
     uint public startTime;
     uint public timeNow;
     uint public voteCountNow;
+    string public titleVote;
     uint[] public scoreAll;
 
     // This declares a state variable that
@@ -34,11 +35,12 @@ contract Ballot {
     bytes32[] Candidate;
 
     /// Create a new ballot to choose one of `proposalNames`.
-    function Ballot_box(bytes32[] proposalNames ,uint _startTime ,uint _timeToExpiry) public payable{
+    function Ballot_box(string title_, bytes32[] proposalNames ,uint _startTime ,uint _timeToExpiry) public payable{
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
         timeToExpiry = _timeToExpiry;
         startTime = _startTime;
+        titleVote = title_;
         Candidate = proposalNames;
 
         // For each of the provided proposal names,
@@ -53,6 +55,10 @@ contract Ballot {
                 voteCount: 0
             }));
         }
+    }
+
+    function getTitle() public returns (string nameTitle_) {
+        nameTitle_ = titleVote;
     }
     
     function getProposalsName() public constant returns (bytes32[] nameCandi_) {

@@ -18,7 +18,6 @@ var Ballot = truffleContract(ballotArtifact);
 Ballot.setProvider(web3.currentProvider);
 
 
-var title;
 let abi;
 var nameAddress = new Array();
 
@@ -161,15 +160,24 @@ app.get('/viewResult', (req, res) => {
     var win;
     Ballot.deployed().then(function (instance) {
         scoreAll = instance.scoreProposal.call();
+        nameProposals = instance.getProposalsName.call();
         winName = instance.winnerName.call();
         scoreAll.then(function (scoreVote) {
             score = scoreVote;
             console.log("1   " + score);
-        })
-        winName.then(function (winnName) {
-            win = winnName;
-            console.log("2   " + winnName)
-            res.render('viewResult.ejs', { score, winnName });
+            nameProposals.then(function (resultName) {
+                var stringName = [];
+                for (i = 0; i < resultName.length; i++) {
+                    stringName.push(web3.toAscii(resultName[i]).replace(/\0/g, ''));
+                }
+                resultName = stringName;
+                console.log("2  ", resultName);
+                winName.then(function (winnName) {
+                    win = winnName;
+                    console.log("3  " + winnName)
+                    res.render('viewResult.ejs', { score, winnName, resultName });
+                })
+            })
         }).catch(function (err) {
             console.log("can't get winner name");
         })
@@ -214,22 +222,22 @@ app.post('/sessionLogin', (req, res) => {
 });
 
 // Get Voters
-app.get('/vote', isAuthenticated, (req, res) => {
+app.get('/vote', (req, res) => {
     Ballot.deployed().then(function (instance) {
-        // countProposals = instance.getProposalsCounts.call();
         nameProposals = instance.getProposalsName.call();
-        // countProposals.then(function(resultLength){
-        //     res.json(resultLength);
-        //     console.log(resultName.length);
-        // })
+        titleName = instance.getTitle.call();
         nameProposals.then(function (resultName) {
             var stringName = [];
             for (i = 0; i < resultName.length; i++) {
                 stringName.push(web3.toAscii(resultName[i]).replace(/\0/g, ''));
             }
             resultName = stringName;
-            console.log(resultName);
-            res.render('vote.ejs', { resultName });
+            console.log("1", resultName);
+            // res.render('vote.ejs', {resultName});
+            titleName.then(function (nameTitle) {
+                console.log("2", nameTitle);
+                res.render('vote.ejs', { resultName, nameTitle });
+            })
         })
     }).catch(function (err) {
         console.log("Can't get name of proposals");
@@ -265,17 +273,52 @@ app.post('/voted', (req, res) => {
     res.json({ status: 'success' })
 })
 
-// app.get('/deleteFirestore', (req, res) => {
-//     var deleteDoc = db.collection('voter').doc();
-//     var delDoc = deleteDoc.get()
-//         .then(function (result) {
-//             console.log("All Delete");
-//         }).catch(function (err) {
-//             console.log("can't delete :", err);
-//         })
-// })
+app.get('/deleteFirestore', (req, res) => {
+    function deleteCollection(db, collectionPath, batchSize) {
+        var collectionRef = db.collection(voters);
+        var query = collectionRef.limit(batchSize);
 
-app.get('/createVote', isAdmin, (req, res) => {
+        return new Promise((resolve, reject) => {
+            deleteQueryBatch(db, query, batchSize, resolve, reject);
+        });
+    }
+
+    function deleteQueryBatch(db, query, batchSize, resolve, reject) {
+        query.get()
+            .then((snapshot) => {
+                // When there are no documents left, we are done
+                if (snapshot.size == 0) {
+                    return 0;
+                }
+
+                // Delete documents in a batch
+                var batch = db.batch();
+                snapshot.docs.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+
+                return batch.commit().then(() => {
+                    return snapshot.size;
+                    console.log("1. DONE");
+                });
+            }).then((numDeleted) => {
+                if (numDeleted === 0) {
+                    resolve();
+                    return;
+                    console.log("2. DONE");
+                }
+
+                // Recurse on the next process tick, to avoid
+                // exploding the stack.
+                process.nextTick(() => {
+                    deleteQueryBatch(db, query, batchSize, resolve, reject);
+                });
+            })
+            .catch(reject);
+    }
+})
+
+app.get('/createVote', (req, res) => {
     // let source = fs.readFileSync('./contracts/ballot.sol', 'UTF-8');
     // let compiled = solc.compile(source);
 
@@ -290,30 +333,32 @@ app.get('/createVote', isAdmin, (req, res) => {
     res.render('createVote.ejs')
 })
 
-app.post('/createVote', isAdmin, (req, res) => {
-    title = req.body.titleSub;
+app.post('/createVote', (req, res) => {
+    var title = req.body.titleSub;
     var candidate = req.body.nameCandidate;
     var dateStart = req.body.startDate;
     var dateEnd = req.body.endDate;
     var dateStartTimeStamp = Date.parse(dateStart);
     var dateEndTimeStamp = Date.parse(dateEnd);
+    var startTimeStamp = dateStartTimeStamp.toString();
+    var endTimeStamp = dateEndTimeStamp.toString();
+    var startStamp = startTimeStamp.slice(0, 10);
+    var endStamp = endTimeStamp.slice(0, 10);
+    var startTime = parseInt(startStamp);
+    var endTime = parseInt(endStamp);
     var createCandi;
     var winName;
     var blockNum;
     var BallotContract;
     var voting;
-    console.log(dateStartTimeStamp, dateEndTimeStamp);
+    console.log(startTime, endTime);
     console.log(title, candidate);
 
     // console.log(ballotArtifact);
     Ballot.deployed().then(function (instance) {
-        createCandi = instance.Ballot_box.sendTransaction(candidate, dateStartTimeStamp, dateEndTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
-        // voting = instance.vote.sendTransaction(1, { from: web3.eth.coinbase });
-        // voting.then(function (voteScore) {
-        //     console.log(voteScore);
-        // })
+        createCandi = instance.Ballot_box.sendTransaction(title, candidate, startTime, endTime, { from: web3.eth.coinbase, gas: 6721975 });
         createCandi.then(function (result) {
-            console.log(result);
+            console.log("1", result);
         }).catch(function (err) {
             console.log("create candidate Error !!");
         })
