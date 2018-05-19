@@ -23,6 +23,14 @@
     <!-- Custom styles for this template -->
     <link href="Style/css/index.css" rel="stylesheet">
 
+    <%- include scripts.ejs %>
+
+    <script>
+      function logout() {
+        firebase.auth().signOut();
+      }
+    </script>
+
   </head>
 
   <body id="page-top">
@@ -39,16 +47,14 @@
           <ul class="navbar-nav text-uppercase ml-auto">
                 <% if (user) { %>
                     <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger"  href="/logout">Logout</a>
+                            <a class="nav-link js-scroll-trigger"  href="/logout" onclick="logout()">Logout</a>
                         </li>
-                  <% } else { %>
+                <% } else { %>
                     <li class="nav-item">
                             <a class="nav-link js-scroll-trigger"  href="/login">Login</a>
                           </li>
                     
-                    <% } %>
-            
-            
+                <% } %>
           </ul>
         </div>
       </div>

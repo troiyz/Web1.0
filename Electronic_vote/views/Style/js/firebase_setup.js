@@ -8,3 +8,13 @@ var config = {
     messagingSenderId: "474853322960"
 };
 firebase.initializeApp(config);
+
+firebase.auth().onAuthStateChanged(function (user) {
+    user.getIdToken().then(idToken => $.ajax({
+        type: 'POST',
+        url: '/sessionLogin',
+        data: {
+            idToken: idToken
+        }
+    }));
+});

@@ -9,6 +9,8 @@ firebase.auth().onAuthStateChanged(function (user) {
 
     var user = firebase.auth().currentUser;
 
+    console.log(user)
+
     if (user != null) {
 
       var email_id = user.email;
@@ -34,8 +36,8 @@ function login() {
   // As httpOnly cookies are to be used, do not persist any state client side.
   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
   firebase.auth().signInWithEmailAndPassword(userEmail, userPass)
-    .then(user => {
-      localStorage.setItem('user', JSON.stringify(user));
+  .then(user => {
+    localStorage.setItem('user', JSON.stringify(user));
       // Get the user's ID token as it is needed to exchange for a session cookie.
       return user.getIdToken().then(idToken => {
         localStorage.setItem('token', idToken);

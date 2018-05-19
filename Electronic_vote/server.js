@@ -31,6 +31,9 @@ admin.initializeApp({
     databaseURL: 'https://blockchain-1.firebaseio.com'
 });
 
+
+
+
 const config = {
     apiKey: "AIzaSyBHxu0leiSXx2kCkjIGd8BPd7BEQDvHZAA",
     authDomain: "blockchain-1.firebaseapp.com",
@@ -68,12 +71,18 @@ const isAuthenticated = (req, res, next) => {
     if (user !== null && user !== undefined) {
         next();
     } else {
-        res.redirect('/login');
+        res.redirect('/loginVoter');
     }
 }
 
 const isAdmin = (req, res, next) => {
-    const userId = req.session.user.userId;
+    const user = req.session.user;
+    console.log(user)
+    if (user == undefined || user == null) {
+        res.redirect('/');
+        return;
+    }
+    const userId = user.userId;
     const idToken = req.session.idToken;
     admin.auth().verifyIdToken(idToken).then((claims) => {
         if (claims.admin === true) {
@@ -86,13 +95,15 @@ const isAdmin = (req, res, next) => {
 
 app.get('/', (req, res) => {
     let contractCreation = JSON.parse(fs.readFileSync('./build/contracts/Ballot.json', 'UTF-8'));
-    console.log(web3.eth.accounts)
+    // console.log(web3.eth.accounts)
     console.log(contractCreation.networks[7777].address)
     res.render('index.ejs')
 })
-app.get('/login', (req, res) => res.render('loginAsVoter.ejs'))
 
-app.post('/login', (req, res) => res.render('loginAsVoter.ejs'))
+app.get('/loginVoter', (req, res) => res.render('loginAsVoter.ejs'))
+app.get('/login', (req, res) => res.render('login.ejs'))
+
+// app.post('/login', (req, res) => res.render('loginAsVoter.ejs'))
 
 
 app.get('/logout', isAuthenticated, (req, res) => {
@@ -104,28 +115,33 @@ app.get('/logout', isAuthenticated, (req, res) => {
 app.get('/getData', (req, res) => {
     console.log(newAddress);
     console.log(nameAddress);
-    res.render('getData.ejs')}
+    res.render('getData.ejs')
+}
 )
 
 app.get('/confirmation', (req, res) => res.render('confirmation.ejs'))
 
 app.post('/confirmation', (req, res) => {
     var phoneNum = req.body.phoneNumber;
+    var values = web3.toWei('0.05', 'ether');
     var newAddress = web3.personal.newAccount();
+    web3.personal.unlockAccount(newAddress);
+    web3.eth.sendTransaction({ to: newAddress, from: web3.eth.coinbase, value: values })
     var nameAddress = db.collection("address").doc(phoneNum);
     var setNameAddress = nameAddress.set({
-        address : newAddress
+        address: newAddress
     })
     Ballot.deployed().then(function (instance) {
-        giveRight = instance.giveRightToVote.sendTransaction(newAddress , { from: web3.eth.coinbase, gas: 6721975 })
+        giveRight = instance.giveRightToVote.sendTransaction(newAddress, { from: web3.eth.coinbase, gas: 6721975 })
         giveRight.then(function (give) {
             console.log(give);
-        }).catch(function (err){
+        }).catch(function (err) {
             console.log("Can't give right to vote");
         })
     })
     // nameAddress[phoneNum] = newAddress;
-    console.log(phoneNum);
+    console.log(phoneNum, "from Confirmation");
+    console.log(newAddress, "from Confirmation");
     res.redirect('confirmation.ejs');
 })
 
@@ -149,8 +165,6 @@ app.get('/viewResult', (req, res) => {
         scoreAll.then(function (scoreVote) {
             score = scoreVote;
             console.log("1   " + score);
-        }).catch(function (err) {
-            console.log("can't get score");
         })
         winName.then(function (winnName) {
             win = winnName;
@@ -169,12 +183,28 @@ app.get('/viewResult', (req, res) => {
 // app.get('/vote', (req, res) => res.render('vote.ejs'))
 // app.post('/vote', (req, res) => res.render('vote.ejs'))
 
+// app.post('/sessionLogin', (req, res) => {
+//     const toUser = idToken => {
+//         const payload = jwt.decode(idToken, { complete: true }).payload;
+//         return {
+//             userId: payload.user_id,
+//             email: payload.email
+//         }
+//     }
+//     const idToken = req.body.idToken.toString();
+//     req.session.idToken = idToken;
+//     req.session.user = toUser(idToken);
+//     res.json({ status: 'success' })
+// });
+
 app.post('/sessionLogin', (req, res) => {
     const toUser = idToken => {
         const payload = jwt.decode(idToken, { complete: true }).payload;
         return {
             userId: payload.user_id,
-            email: payload.email
+            email: payload.email,
+            phone_number: payload.phoneNumber,
+            ...payload,
         }
     }
     const idToken = req.body.idToken.toString();
@@ -184,7 +214,7 @@ app.post('/sessionLogin', (req, res) => {
 });
 
 // Get Voters
-app.get('/vote', (req, res) => {
+app.get('/vote', isAuthenticated, (req, res) => {
     Ballot.deployed().then(function (instance) {
         // countProposals = instance.getProposalsCounts.call();
         nameProposals = instance.getProposalsName.call();
@@ -207,44 +237,60 @@ app.get('/vote', (req, res) => {
 });
 
 app.post('/voted', (req, res) => {
-    // var phone = req.body.phoneNumber;
-    // console.log(phone)
-    // var getAdd = db.collection("address").doc(phone);
-    // var query = getAdd.getCollections.then(collections => {
-    //     collections.forEach(collection => {
-    //         console.log('ADDRESS :', collection.id)
-    //     })
-    //     console.log(collection.id);
-    // })
-    console.log(web3.personal.unlockAccount('0xb1d4489db55c6c8d84f9c9197c3e3c6d238d9887'))
+    var phone = req.session.user.phone_number;
+    var address;
     voteSelect = req.body.thisclick;
-    console.log(voteSelect);
-    Ballot.deployed().then(function (instance) {
-        voting = instance.vote.sendTransaction(voteSelect, { from: '0xb1d4489db55c6c8d84f9c9197c3e3c6d238d9887' });
-        voting.then(function (voteScore) {
-            console.log(voteScore);
+    console.log(phone)
+    var getAdd = db.collection("address").doc(phone);
+    var query = getAdd.get()
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                address = doc.data().address;
+                console.log("2", address);
+                Ballot.deployed().then(function (instance) {
+                    voting = instance.vote.sendTransaction(voteSelect, { from: address, gas: 6721975 });
+                    voting.then(function (voteScore) {
+                        console.log(voteScore);
+                    }).catch(function (err) {
+                        console.log("voting error", err);
+                    })
+                })
+            }
+        }).catch(err => {
+            console.log('Error getting document', err);
         })
-    }).catch(function (err) {
-        console.log("Can't deployed function vote");
-    })
+    // console.log(voteSelect);
+    res.json({ status: 'success' })
 })
 
-app.get('/createVote', (req, res) => {
-    let source = fs.readFileSync('./contracts/ballot.sol', 'UTF-8');
-    let compiled = solc.compile(source);
+// app.get('/deleteFirestore', (req, res) => {
+//     var deleteDoc = db.collection('voter').doc();
+//     var delDoc = deleteDoc.get()
+//         .then(function (result) {
+//             console.log("All Delete");
+//         }).catch(function (err) {
+//             console.log("can't delete :", err);
+//         })
+// })
 
-    bin = compiled.contracts[':Ballot'].bytecode;
+app.get('/createVote', isAdmin, (req, res) => {
+    // let source = fs.readFileSync('./contracts/ballot.sol', 'UTF-8');
+    // let compiled = solc.compile(source);
+
+    // bin = compiled.contracts[':Ballot'].bytecode;
 
     // util.log(`>>>>> setup - Bytecode: ${bin}`);
     // util.log(`>>>>> setup - ABI: ${compiled.contracts[':Ballot'].interface}`);
 
-    abi = JSON.parse(compiled.contracts[':Ballot'].interface);
+    // abi = JSON.parse(compiled.contracts[':Ballot'].interface);
 
     util.log('>>>>> setup - Completed !!!')
     res.render('createVote.ejs')
 })
 
-app.post('/createVote', (req, res) => {
+app.post('/createVote', isAdmin, (req, res) => {
     title = req.body.titleSub;
     var candidate = req.body.nameCandidate;
     var dateStart = req.body.startDate;
@@ -289,6 +335,15 @@ app.post('/createVote', (req, res) => {
 app.get('/auth', isAuthenticated, (req, res) => {
     res.json(req.session.user)
 });
+
+app.get('/makeadmin', isAuthenticated, (req, res) => {
+    const uid = req.session.user.userId;
+    admin.auth().setCustomUserClaims(uid, { admin: true }).then(() => {
+        res.json({
+            'message': `You're admin.`
+        })
+    });
+})
 
 app.get('/admin/users', isAuthenticated, isAdmin, (req, res) => {
     admin.auth().listUsers(1000)
