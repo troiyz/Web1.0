@@ -148,9 +148,11 @@ app.post('/confirmation', (req, res) => {
 app.get('/dashboard', (req, res) => {
     Ballot.deployed().then(function (instance) {
         voteCount = instance.getVoteCountNow.call();
+        nameProposals = instance.getProposalsName.call();
+        titleName = instance.getTitle.call();
+        timeStart = instance.setStartTimeStamp.call();
+        timeEnd = instance.setEndTimeStamp.call();
         voteCount.then(function (resultVoteCount) {
-            nameProposals = instance.getProposalsName.call();
-            titleName = instance.getTitle.call();
             nameProposals.then(function (resultName) {
                 var stringName = [];
                 for (i = 0; i < resultName.length; i++) {
@@ -161,10 +163,18 @@ app.get('/dashboard', (req, res) => {
                 // res.render('vote.ejs', {resultName});
                 titleName.then(function (nameTitle) {
                     console.log("2", nameTitle);
-                    res.render('dashboard.ejs', { resultName, nameTitle, resultVoteCount });
+                    timeStart.then(function (startTime) {
+                        console.log("3", startTime)
+                        timeEnd.then(function (endTime) {
+                            console.log("4", endTime)
+                            res.render('dashboard.ejs', { resultName, nameTitle, resultVoteCount, startTime, endTime });
+                        })
+                    })
                 })
             })
         })
+    }).catch(function (err) {
+        console.log(err);
     })
 })
 
@@ -189,7 +199,7 @@ app.get('/viewResult', (req, res) => {
                 winName.then(function (winnName) {
                     win = winnName;
                     console.log("3  " + winnName)
-                    voteCount.then(function (resultVoteCount){
+                    voteCount.then(function (resultVoteCount) {
                         console.log("4 ", resultVoteCount);
                         res.render('viewResult.ejs', { score, winnName, resultName, resultVoteCount });
                     })
@@ -275,19 +285,19 @@ app.post('/voted', (req, res) => {
                 address = doc.data().address;
                 console.log("2", address);
                 Ballot.deployed().then(function (instance) {
-                    voting = instance.vote.sendTransaction(voteSelect, { from: address, gas: 6721975 });
+                    voting = instance.vote.sendTransaction(voteSelect, { from: web3.eth.coinbase, gas: 6721975 });
                     voting.then(function (voteScore) {
                         console.log(voteScore);
                     }).catch(function (err) {
                         console.log("voting error", err);
                     })
+                }).catch(err => {
+                    console.log('Error getting document', err);
                 })
+                console.log(voteSelect);
+                res.json({ status: 'success' })
             }
-        }).catch(err => {
-            console.log('Error getting document', err);
         })
-    // console.log(voteSelect);
-    res.json({ status: 'success' })
 })
 
 app.get('/deleteFirestore', (req, res) => {
@@ -305,6 +315,18 @@ app.get('/deleteFirestore', (req, res) => {
 })
 
 app.get('/createVote', (req, res) => {
+    Ballot.deployed().then(function (instance) {
+        checkCan = instance.checkCreate.call();
+        checkCan.then(function (result) {
+            console.log(result)
+            if (result == undefined || result == false) {
+                res.render('createVote.ejs')
+            }
+            else {
+                res.redirect('/dashboard')
+            }
+        })
+    })
     // let source = fs.readFileSync('./contracts/ballot.sol', 'UTF-8');
     // let compiled = solc.compile(source);
 
@@ -315,8 +337,6 @@ app.get('/createVote', (req, res) => {
 
     // abi = JSON.parse(compiled.contracts[':Ballot'].interface);
 
-    util.log('>>>>> setup - Completed !!!')
-    res.render('createVote.ejs')
 })
 
 app.post('/createVote', (req, res) => {
@@ -337,14 +357,24 @@ app.post('/createVote', (req, res) => {
     var blockNum;
     var BallotContract;
     var voting;
+    console.log(dateStart, dateEnd);
     console.log(startTime, endTime);
     console.log(title, candidate);
 
     // console.log(ballotArtifact);
     Ballot.deployed().then(function (instance) {
         createCandi = instance.Ballot_box.sendTransaction(title, candidate, startTime, endTime, { from: web3.eth.coinbase, gas: 6721975 });
+        timeStart = instance.setStartTimeStamp.sendTransaction(dateStartTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
+        timeEnd = instance.setEndTimeStamp.sendTransaction(dateEndTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
         createCandi.then(function (result) {
             console.log("1", result);
+            timeStart.then(function (startTime) {
+                console.log("2", startTime)
+                timeEnd.then(function (endTime) {
+                    console.log("3", endTime)
+                    res.redirect('/createVote');
+                })
+            })
         }).catch(function (err) {
             console.log("create candidate Error !!");
         })
@@ -360,7 +390,6 @@ app.post('/createVote', (req, res) => {
     }).catch(function (err) {
         console.log("Deployed function create vote Failed!!");
     })
-    res.json(candidate);
 });
 
 app.get('/auth', isAuthenticated, (req, res) => {
