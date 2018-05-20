@@ -25,6 +25,9 @@ contract Ballot {
     uint public voteCountNow;
     string public titleVote;
     uint[] public scoreAll;
+    uint public startTimeStamp;
+    uint public endTimeStamp;
+    bool public createCan = false;
 
     // This declares a state variable that
     // stores a `Voter` struct for each possible address.
@@ -42,6 +45,7 @@ contract Ballot {
         startTime = _startTime;
         titleVote = title_;
         Candidate = proposalNames;
+        createCan = true;
 
         // For each of the provided proposal names,
         // create a new proposal object and add it
@@ -55,6 +59,26 @@ contract Ballot {
                 voteCount: 0
             }));
         }
+    }
+
+    function setStartTimeStamp(uint startTime_) public returns (uint startTimeStamp){
+        startTimeStamp = startTime_;
+    }
+
+    function setEndTimeStamp(uint endTime_) public returns (uint endTimeStamp){
+        endTimeStamp = endTime_;
+    }
+
+    function getStartTimeStamp() public returns (uint startTimeStamp_) {
+        startTimeStamp_ = startTimeStamp;
+    }
+
+    function getEndTimeStamp() public returns (uint endTimeStamp_) {
+        endTimeStamp_ = endTimeStamp;
+    }
+
+    function checkCreate() public returns (bool already_){
+        already_ = createCan;
     }
 
     function getTitle() public returns (string nameTitle_) {
@@ -110,13 +134,13 @@ contract Ballot {
     /// Give your vote (including votes delegated to you)
     /// to proposal `proposals[proposal].name`.
     function vote(uint proposal) public payable{
-        Voter storage sender = voters[msg.sender];
-        require((!sender.voted) &&
-            (voters[msg.sender].weight == 1) &&
-            (now < timeToExpiry) &&
-            (now > startTime));
-        sender.voted = true;
-        sender.vote = proposal;
+        // Voter storage sender = voters[msg.sender];
+        // require((!sender.voted) &&
+        //     (voters[msg.sender].weight == 1) &&
+        //     (now < timeToExpiry) &&
+        //     (now > startTime));
+        // sender.voted = true;
+        // sender.vote = proposal;
 
         // If `proposal` is out of the range of the array,
         // this will throw automatically and revert all
