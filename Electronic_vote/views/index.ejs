@@ -14,11 +14,20 @@
     <link href="Style/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/4.3/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-firestore.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="Style/js/firebase_setup.js"></script>
     <link href="Style/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="Style/css/loginAsVoter.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
+    <script src="Style/js/loginAsVoter.js"></script>
+    <script src="Style/js/login.js"></script>
 
     <!-- Custom styles for this template -->
     <link href="Style/css/index.css" rel="stylesheet">
@@ -50,15 +59,45 @@
                             <a class="nav-link js-scroll-trigger"  href="/logout" onclick="logout()">Logout</a>
                         </li>
                 <% } else { %>
-                    <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger"  href="/login">Login</a>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        LOGIN
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+                        <a class="dropdown-item" href="#">Login as admin</a>
+                        <a class="dropdown-item" href="#" id="myBtn" onclick="document.getElementById('modal-wrapper').style.display='block'" style="width:200px; margin-top:200px; margin-left:160px;">Login as voter</a>
+                      </div>
                           </li>
-                    
                 <% } %>
+                
           </ul>
         </div>
       </div>
     </nav>
+    
+    <div id="modal-wrapper" class="modal">
+  
+        <form class="modal-content animate" action="/action_page.php">
+              
+          <div class="imgcontainer">
+            <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close PopUp">&times;</span>
+            <img src="1.png" alt="Avatar" class="avatar">
+            <h1 style="text-align:center">Modal Popup Box</h1>
+          </div>
+      
+          <div class="container">
+            <input type="text" placeholder="Enter Username" name="uname">
+            <input type="password" placeholder="Enter Password" name="psw">        
+            <button type="submit">Login</button>
+            <input type="checkbox" style="margin:26px 30px;"> Remember me      
+            <a href="#" style="text-decoration:none; float:right; margin-right:34px; margin-top:26px;">Forgot Password ?</a>
+          </div>
+          
+        </form>
+        
+      </div>
+
+    
 
     <!-- Header -->
     <header class="masthead">
@@ -125,6 +164,7 @@
 
     <!-- Custom scripts for this template -->
     <script src="Style/js/agency.min.js"></script>
+
 
   </body>
 

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Dashboard</title>
+    <title>Create vote</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css">
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -9,27 +9,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="Style/css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="Style/css/admin.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="Style/js/datetime.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
+    <!-- <div class="headerCreatvote">Create Vote</div> -->
 
-    <%- include scripts.ejs   %>
 
 </head>
 
 <body>
-
         <div class="sidenav">
                 <div class="headSide">Electronic vote</div><br><br>
                 <div class="row" id="createContrainer">
-                    <a class="nameTitle" id="nameTitle"><%= nameTitle %></a>
+                        <a class="btn btn-primary" href="/createVote" role="button" id="btnCreate">Createvote</a>
                 </div>
-                <div id="colmenu1">
-                    <a id="menu1" href="/confirmation"> Confirmation</a>
-                </div>
-                <div id="colmenu2">
-                    <a id="menu2" href="/dashboard"> Dashboard</a>
-                </div>
+                <li id="area"></li>
                 <div class="logoutContrainer" id="logoutContrainer">
                     <a class="btn btn-danger" href="/logout" id="btnLogout">Logout</a>
                 </div>
@@ -38,35 +32,24 @@
                 <a class="dashPage" href="dashboard.html">Dashboard</a>
                 <a class="viewPage" href="#contact">View result</a> -->
         </div>
-    
-    <div id="contrainerName">
-            <div class="container" id="contrainerAll">
-                    <div class="row">
-                      <div class="col" id="colum1">
-                            <div class="numberOfvoted">Number of voted</div>
-                            <div class="resultVoteCount"><%= resultVoteCount %></div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col" id="colum2">
-                            <% for(var i=0; i<resultName.length; i++){ %>
-                                    OPTIONS: <%= resultName[i] %><br>
-                                    <% } %>
-                      </div>
-                      <div class="col" id="colum3">
-                            <div class="Titletime"></div>
-                            <div class="time" id="time">START TIME : <%= startTime %></div>
-                            <div class="time" id="time">END TIME : <%= endTime %></div>
-                      </div>
-                    </div>
-                  </div>
-
-    
-    
-
-   
-    
 </body>
+<script>
+    $(document).ready(function () {
+        var wrapper = $(".container1");
+        var add_button = $("#add_form_field");
+
+        $(add_button).click(function (e) {
+            e.preventDefault();
+            $(wrapper).append('<div><input type="text" name="nameCandidate" class="form-control" id="optionInput"/><a href="#" class="btn btn-danger"id="delete">Delete</a></div>'); //add input box
+        });
+        $(wrapper).on("click", "#delete", function (e) {
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+    });
+    
+</script>
+<!-- <script type="text/javascript" src="../node_modules/web3/dist/web3.min.js"></script> -->
+<script src="Style/js/datetime.js"></script>
 
 
 </html>

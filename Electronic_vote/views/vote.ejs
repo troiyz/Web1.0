@@ -2,7 +2,7 @@
 
 <head>
   <title>Dynamically add input field using jquery</title>
-  <link rel="stylesheet" href="css/styleForm.css" />
+ 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css">
@@ -13,41 +13,36 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script>
   <link rel="stylesheet" type="text/css" href="Style/css/vote.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
 </head>
 
 <body>
 
-  <!-- <form>
-    <div id="Participentfieldwrap">
-      <div class="card-body">
-              <h4 class="card-title">
-                <a href="#" class="headName" id="headName"> Project </a>
-              </h4>
-              
-              <button type="button" id="voted1" onclick="voted1Alert()" value="voted1">Vote</button>
-            </div>
-    </div>        
-  </form> -->
-
   <form action="/voted" method="POST">
-    <div class="contrainerVote">
-      <div class="voteFo">
-        <% for(var i=0; i<resultName.length; i++){ %>
-
-          <div class="formDetail">
-            <a href="#" class="headName" id="headName">
-              <%= resultName[i] %>
-            </a>
-            <button type="submit" id="<%= [i] %>" name="thisclick" class="btnVote" value="<%= [i] %>">Vote</button>
-
-          </div>
-
-          <% } %>
+    <div class="row">
+        <div class="col-6 col-md-4"></div>
+        <div class="col-6 col-md-4"><div class="contrainerVote">
+            <div id="subjectText"> <%= nameTitle %> </div>
+            <div class="voteFo">
+              <% for(var i=0; i<resultName.length; i++){ %>
+                <div class="formDetail">
+                  <div class="button-some">
+                      <div href="#" class="headName" id="headName">
+                          <%= resultName[i] %>
+                      </div>
+                        <button type="submit" id="<%= [i] %>" name="thisclick" class="btn btn-success" value="<%= [i] %>">Vote</button>      
+                  </div>
+                </div>
+      
+                <% } %>
+            </div>
+          </div></div>
+        <div class="col-6 col-md-4"></div>
       </div>
-    </div>
+
+
+    
   </form>
 
 

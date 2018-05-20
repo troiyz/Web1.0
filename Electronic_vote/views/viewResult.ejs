@@ -10,37 +10,66 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="Style/css/agency.css">
-    <link rel="stylesheet" type="text/css" href="Style/css/styleForm.css" />
+    <link rel="stylesheet" type="text/css" href="Style/css/viewResult.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" href="Style/css/styleForm.css" /> -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
     <div class="headerCreatvote">View result</div>
 
-<style type="text/css">
-        .viewPage {
-            border-bottom: solid 1px;
-            border-bottom-color: aqua;
-        }
-    </style>
+
 
 </head>
 
 <body>
+    <div class="resultVoteCount">
 
-    <div class="sidenav">
-        <div class="logoz" href="#about">&nbsp;Electronic vote</div>
-        <br>
-        <br>
-        <a class="createPage" href="/createVote">Create vote</a>
-        <a class="conPage" href="/confirmation">Confirmation</a>
-        <a class="dashPage" href="/dashboard">Dashboard</a>
-        <a class="viewPage" href="#">View result</a>
-    </div>
-    <div class = "resultVoteCount">
-        Winner name => <%= winnName %> <br>
-        Score Vote => <%= score %>
+        <!-- Name Proposals => <%= resultName %> <br>
+        Score Vote => <%= score %><br> -->
 
     </div>
-    
+
+    <div class="voteFo">
+        <% for(var i=0; i<resultName.length; i++){ %>
+            <div class="formDetail">
+                <div class="titleGauge">
+                    <div href="#" class="headName" id="headName">
+                        <%= resultName[i] %>
+                        (<%= score[i] %>)
+                            <div class="progress" id="progress">
+                                <div class="progress-bar" role="progressbar" style="width: <%= (score[i]*100)/resultVoteCount %>%" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-6">
+            <div class="peopleVoted">
+                <div class="titlePeople">NUMBER OF PEOPLE VOTED</div>
+                <div class="allVoted">
+                    <%= resultVoteCount %>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="nameWinner">
+                <div class="winner">Winner is</div>
+                <div class="winnerName">
+                    <%= winnName %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </body>
 
 <!-- <script type="text/javascript" src="../node_modules/web3/dist/web3.min.js"></script> -->

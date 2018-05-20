@@ -12,6 +12,7 @@
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="Style/js/firebase_setup.js"></script>
     <script src="Style/js/loginAsVoter.js"></script>
+    <link rel="stylesheet" href="Style/css/loginAsVoter.css">
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
     <style>
         body {
@@ -28,8 +29,11 @@
                     <input class="mdl-textfield__input" name="phoneNumber" type="text" pattern="\+[0-9\s\-\(\)]+" id="phoneNumber">
                     <label class="mdl-textfield__label" for="phoneNumber">Enter your phone number...</label>
                     <span class="mdl-textfield__error">Input is not an international phone number!</span>
+                    <div id="bt-floatRight">
+                    <input disabled class="mdl-button mdl-js-button mdl-button--raised" type="submit" id="sign-in-button"></input>
+                    </div>  
                 </div>
-                <input disabled class="mdl-button mdl-js-button mdl-button--raised" type="submit" id="sign-in-button"></input>
+                
             </form>
         
             <!-- Sign-in button -->

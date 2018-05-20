@@ -41,6 +41,7 @@ body {
       width: 20%;
       display: inline;
       margin-bottom: 1em;
+      margin-right: 1em;
 }
 
 .containerTime{
@@ -60,3 +61,60 @@ body {
 #lunchBtn{
     margin-top: 2em;
 }
+
+/* sidebar css */
+
+.sidenav {
+    height: 100%;
+    width: 260px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(38, 40, 70);
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  
+  .sidenav a {
+    text-decoration: none;
+    display: block;
+  }
+  
+  
+  .headSide{
+    font-size: 2em;
+    margin-top: 2em;
+    margin-left: 1em;
+    color: white;
+  }
+  
+  .wrapContrainer{
+    margin-left: 15%;
+    width: 50%;
+  }
+  
+  #createContrainer{
+    margin-top: 2em;
+    margin-bottom: 2em;
+    
+  }
+  
+  #logoutContrainer{
+    margin-left: 35%;
+  }
+  #area{
+    height: 66.5%;
+  }
+  
+  #btnCreate{
+    display: block;
+    margin: auto;
+    width: 50%;
+  }
+
+  #containerVote{
+      margin-top: 6%;
+      margin-left: 15%;
+  }
