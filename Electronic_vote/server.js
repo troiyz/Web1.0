@@ -46,6 +46,7 @@ firebase.initializeApp(config);
 var db = admin.firestore();
 
 
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -148,9 +149,21 @@ app.get('/dashboard', (req, res) => {
     Ballot.deployed().then(function (instance) {
         voteCount = instance.getVoteCountNow.call();
         voteCount.then(function (resultVoteCount) {
-            console.log(voteCount);
-            console.log(resultVoteCount);
-            res.render('dashboard.ejs', { resultVoteCount });
+            nameProposals = instance.getProposalsName.call();
+            titleName = instance.getTitle.call();
+            nameProposals.then(function (resultName) {
+                var stringName = [];
+                for (i = 0; i < resultName.length; i++) {
+                    stringName.push(web3.toAscii(resultName[i]).replace(/\0/g, ''));
+                }
+                resultName = stringName;
+                console.log("1", resultName);
+                // res.render('vote.ejs', {resultName});
+                titleName.then(function (nameTitle) {
+                    console.log("2", nameTitle);
+                    res.render('dashboard.ejs', { resultName, nameTitle, resultVoteCount });
+                })
+            })
         })
     })
 })
@@ -162,6 +175,7 @@ app.get('/viewResult', (req, res) => {
         scoreAll = instance.scoreProposal.call();
         nameProposals = instance.getProposalsName.call();
         winName = instance.winnerName.call();
+        voteCount = instance.getVoteCountNow.call();
         scoreAll.then(function (scoreVote) {
             score = scoreVote;
             console.log("1   " + score);
@@ -175,7 +189,10 @@ app.get('/viewResult', (req, res) => {
                 winName.then(function (winnName) {
                     win = winnName;
                     console.log("3  " + winnName)
-                    res.render('viewResult.ejs', { score, winnName, resultName });
+                    voteCount.then(function (resultVoteCount){
+                        console.log("4 ", resultVoteCount);
+                        res.render('viewResult.ejs', { score, winnName, resultName, resultVoteCount });
+                    })
                 })
             })
         }).catch(function (err) {
@@ -274,48 +291,17 @@ app.post('/voted', (req, res) => {
 })
 
 app.get('/deleteFirestore', (req, res) => {
-    function deleteCollection(db, collectionPath, batchSize) {
-        var collectionRef = db.collection(voters);
-        var query = collectionRef.limit(batchSize);
 
-        return new Promise((resolve, reject) => {
-            deleteQueryBatch(db, query, batchSize, resolve, reject);
-        });
-    }
+    var batch = db.batch();
 
-    function deleteQueryBatch(db, query, batchSize, resolve, reject) {
-        query.get()
-            .then((snapshot) => {
-                // When there are no documents left, we are done
-                if (snapshot.size == 0) {
-                    return 0;
-                }
-
-                // Delete documents in a batch
-                var batch = db.batch();
-                snapshot.docs.forEach((doc) => {
-                    batch.delete(doc.ref);
-                });
-
-                return batch.commit().then(() => {
-                    return snapshot.size;
-                    console.log("1. DONE");
-                });
-            }).then((numDeleted) => {
-                if (numDeleted === 0) {
-                    resolve();
-                    return;
-                    console.log("2. DONE");
-                }
-
-                // Recurse on the next process tick, to avoid
-                // exploding the stack.
-                process.nextTick(() => {
-                    deleteQueryBatch(db, query, batchSize, resolve, reject);
-                });
-            })
-            .catch(reject);
-    }
+    db.collection("voters").get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+            var docdel = doc.data().phoneNumber;
+            console.log("1", docdel);
+            batch.delete(docdel);
+            console.log("2", docdel);
+        })
+    })
 })
 
 app.get('/createVote', (req, res) => {
