@@ -1,0 +1,45 @@
+body{
+    font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.headerCreatvote{
+    margin-top: 1em;
+    margin-bottom: 2em; 
+    font-size: 3em;
+    text-align: center;
+    
+}
+
+.mainLeft{
+    background-color: azure;
+}
+.mainRight{
+    background-color: azure;
+}
+
+.numberOfvoted{
+    font-size: 2em;
+    text-align: center;
+}
+
+.resultVoteCount{
+    font-size: 3em;
+    text-align: center;
+
+}
+
+.circleProgress{
+    font-size: 2em;
+    text-align: center;
+    background-color: azure;
+}
+
+.Titletime{
+    font-size: 2em;
+    text-align: center;
+    background-color: azure;
+}
+
+.time{
+    
+}
