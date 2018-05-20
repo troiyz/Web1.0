@@ -1,0 +1,85 @@
+.contrianterAll{
+    margin-left: 20%;
+    margin-top: 6%;
+}
+
+#nameTitle{
+    margin: auto;
+    width: 80%;
+    color: white;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.413);
+    font-size: 1.5em;
+    text-align: center;
+}
+
+/* sidebar css */
+
+.sidenav {
+    height: 100%;
+    width: 260px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(38, 40, 70);
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  
+  
+  .headSide{
+    font-size: 2em;
+    margin-top: 2em;
+    margin-left: 1em;
+    color: white;
+  }
+  
+  .wrapContrainer{
+    margin-left: 15%;
+    width: 50%;
+  }
+  
+  #createContrainer{
+    width: 100%;
+    margin: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    
+  }
+  
+  #logoutContrainer{
+    margin-left: 35%;
+  }
+  
+  #btnCreate{
+    display: block;
+    margin: auto;
+    width: 50%;
+  }
+
+  #colmenu1{
+      width: 80%;
+      margin-left: 10%;
+      margin-bottom: 2em;
+      text-align: center;
+  }
+
+  #colmenu2{
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 25em;
+    text-align: center;
+}
+
+  #menu1{
+    font-size: 1.5em;
+    color: white;
+    text-decoration: none;
+  }
+
+  #menu2{
+    font-size: 1.5em;
+    color: white;
+    text-decoration: none;
+  }
