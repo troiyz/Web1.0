@@ -150,8 +150,8 @@ app.get('/dashboard', (req, res) => {
         voteCount = instance.getVoteCountNow.call();
         nameProposals = instance.getProposalsName.call();
         titleName = instance.getTitle.call();
-        timeStart = instance.setStartTimeStamp.call();
-        timeEnd = instance.setEndTimeStamp.call();
+        timeStart = instance.getStartTimeStamp.call();
+        timeEnd = instance.getEndTimeStamp.call();
         voteCount.then(function (resultVoteCount) {
             nameProposals.then(function (resultName) {
                 var stringName = [];
@@ -357,7 +357,7 @@ app.post('/createVote', (req, res) => {
     var blockNum;
     var BallotContract;
     var voting;
-    console.log(dateStart, dateEnd);
+    console.log(dateStartTimeStamp, dateEndTimeStamp);
     console.log(startTime, endTime);
     console.log(title, candidate);
 
@@ -367,11 +367,11 @@ app.post('/createVote', (req, res) => {
         timeStart = instance.setStartTimeStamp.sendTransaction(dateStartTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
         timeEnd = instance.setEndTimeStamp.sendTransaction(dateEndTimeStamp, { from: web3.eth.coinbase, gas: 6721975 });
         createCandi.then(function (result) {
-            console.log("1", result);
+            console.log("10", result);
             timeStart.then(function (startTime) {
-                console.log("2", startTime)
+                console.log("20", startTime)
                 timeEnd.then(function (endTime) {
-                    console.log("3", endTime)
+                    console.log("30", endTime)
                     res.redirect('/createVote');
                 })
             })

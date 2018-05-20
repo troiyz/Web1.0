@@ -61,11 +61,11 @@ contract Ballot {
         }
     }
 
-    function setStartTimeStamp(uint startTime_) public returns (uint startTimeStamp){
+    function setStartTimeStamp(uint startTime_) public returns (uint){
         startTimeStamp = startTime_;
     }
 
-    function setEndTimeStamp(uint endTime_) public returns (uint endTimeStamp){
+    function setEndTimeStamp(uint endTime_) public returns (uint){
         endTimeStamp = endTime_;
     }
 
