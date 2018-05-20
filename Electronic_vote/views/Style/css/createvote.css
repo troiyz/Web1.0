@@ -2,7 +2,7 @@ body {
     overflow-x: hidden;
     font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin-left: 5em;
-    background-color: white
+    background-color: #e0e7ee;
 }
   
 .headerCreatvote{
@@ -71,7 +71,7 @@ body {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: rgb(38, 40, 70);
+    background-color: #233449;
     overflow-x: hidden;
     padding-top: 20px;
   }
