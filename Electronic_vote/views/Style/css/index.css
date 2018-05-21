@@ -191,7 +191,9 @@ img::-moz-selection {
 header.masthead {
   text-align: center;
   color: white;
+  background-color: rgba(0, 0, 0, 0.406);
   background-image: url("../img/header-bg.jpg");
+  
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
@@ -344,4 +346,28 @@ header.masthead .intro-text .intro-heading {
 .resultVoteCount{
   font-size: 2em;
   color: white;
+}
+
+.modal-backdrop.show{
+  z-index: 0;
+}
+
+.modal-content{
+  height: 30%;
+  text-align: center;
+
+}
+
+.modal-header{
+  width: 100%;
+  text-align: center;
+}
+
+#myButton{
+  margin-top: 2em;
+}
+
+#email_field{
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
