@@ -1,15 +1,31 @@
+body {
+  overflow-x: hidden;
+  font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin-left: 5em;
+
+}
+
 #colum1{
     text-align: center;
-    box-shadow: 0 2px 0 0 gray;
-    margin-bottom: 2em;
+    margin-bottom: 8em;
+
 }
 
 #colum2{
     text-align: left;
+
 }
 
 #colum3{
     text-align: right;
+
+}
+#colum12{
+  border-top: solid 1px rgba(128, 128, 128, 0.454);
+  text-align: center;
+  font-size: 0.5em;
+  margin-bottom: 1em;
+
 }
 
 #contrainerAll{
@@ -31,6 +47,9 @@
     text-align: center;
 }
 
+#resultBox{
+  margin-top: 12em;
+}
 
 /* sidebar css */
 
@@ -41,7 +60,7 @@
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: rgb(38, 40, 70);
+    background-color: #233449;
     overflow-x: hidden;
     padding-top: 20px;
   }

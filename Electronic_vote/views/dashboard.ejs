@@ -22,7 +22,7 @@
         <div class="sidenav">
                 <div class="headSide">Electronic vote</div><br><br>
                 <div class="row" id="createContrainer">
-                    <a class="nameTitle" id="nameTitle"><%= nameTitle %></a>
+                    <a class="nameTitle" id="nameTitle" ><%= nameTitle %></a>
                 </div>
                 <div id="colmenu1">
                     <a id="menu1" href="/confirmation"> Confirmation</a>
@@ -48,6 +48,11 @@
                       </div>
                     </div>
                     <div class="row">
+                            <div class="col" id="colum12">
+                                  <div class="resultVoteCount"><%= nameTitle %></div>
+                            </div>
+                          </div>
+                    <div class="row">
                       <div class="col" id="colum2">
                             <% for(var i=0; i<resultName.length; i++){ %>
                                     OPTIONS: <%= resultName[i] %><br>
@@ -55,18 +60,34 @@
                       </div>
                       <div class="col" id="colum3">
                             <div class="Titletime"></div>
-                            <div class="time" id="time">START TIME : <%= startTime %></div>
-                            <div class="time" id="time">END TIME : <%= endTime %></div>
+                            <div class="time" id="time">START TIME : <%= startTime2 %></div>
+                            <div class="time" id="time">END TIME : <%= endTime2 %></div>
                       </div>
-                    </div>
-                  </div>
+                      
+            </div>
+            <a href="/viewResult"><button class="btn btn-danger" id="resultBox">VIEW RESULT</button></a>
+    </div>
+    
 
-    
-    
 
-   
-    
 </body>
 
+<script>
+        document.getElementById("resultBox").addEventListener("click", function(event){
+            var x = document.getElementById("resultBox");
+            var currentTime = Date.now();
+            if(currentTime < <%= endTime %>){
+                alert("Cant")
+                event.preventDefault()
+            }
+
+        });
+
+        function test(){
+            alert("test");
+        }
+        </script>
+
+        
 
 </html>
