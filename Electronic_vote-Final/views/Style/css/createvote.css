@@ -1,0 +1,121 @@
+body {
+    overflow-x: hidden;
+    font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin-left: 5em;
+    background-color: #e0e7ee;
+}
+  
+.headerCreatvote{
+    color: black;
+    font-size: 3em;
+    margin-top: 1em;
+}
+  
+.logoz{
+    color: white;
+    font-size: 2.3em;
+}
+  
+
+.titleSubb{
+    margin-bottom: 2em;
+}
+
+.nameTitle{
+    margin-top: 2em;
+    font-size: 15px;
+    color: black;
+}
+
+.nameOption{
+    margin-top: 2em;
+    font-size: 15px;
+    color: black;
+}
+
+#titleSub{
+    width: 30%;
+}
+
+#optionInput{
+      width: 20%;
+      display: inline;
+      margin-bottom: 1em;
+      margin-right: 1em;
+}
+
+.containerTime{
+    margin-top: 2em;
+    color:black;
+    font-size: 15px;
+}
+
+#datetimepicker6{
+    width: 20%;
+}
+
+#datetimepicker7{
+    width: 20%;
+}
+
+#lunchBtn{
+    margin-top: 2em;
+}
+
+/* sidebar css */
+
+.sidenav {
+    height: 100%;
+    width: 260px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #233449;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  
+  .sidenav a {
+    text-decoration: none;
+    display: block;
+  }
+  
+  
+  .headSide{
+    font-size: 2em;
+    margin-top: 2em;
+    margin-left: 1em;
+    color: white;
+  }
+  
+  .wrapContrainer{
+    margin-left: 15%;
+    width: 50%;
+  }
+  
+  #createContrainer{
+    margin-top: 2em;
+    margin-bottom: 2em;
+    
+  }
+  
+  #logoutContrainer{
+    margin-left: 35%;
+    margin-right: 35%;
+  }
+  #area{
+    height: 66.5%;
+  }
+  
+  #btnCreate{
+    display: block;
+    margin: auto;
+    width: 50%;
+  }
+
+  #containerVote{
+      margin-top: 6%;
+      margin-left: 15%;
+  }
